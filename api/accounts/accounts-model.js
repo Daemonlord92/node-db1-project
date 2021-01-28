@@ -3,7 +3,7 @@ const db = require('../../data/dbConfig');
 module.exports = {
 	get,
 	getById,
-	//post,
+	post,
 	//update,
 	//remove,
 }
@@ -19,4 +19,10 @@ async function get() {
 async function getById(id) {
 	const accounts = await db.first('*').from('accounts').where({id});
 	return accounts;
+}
+
+async function post(data) {
+	const [accountId] = await db.insert(data).into('accounts');
+	const account = await getById(accountId);
+	return account;
 }

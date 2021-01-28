@@ -21,6 +21,15 @@ router.get('/:id', checkId, async (req, res, next) => {
 	}
 })
 
+router.post('/', checkAccountPost, async (req, res, next) => {
+	const body = req.body;
+	try{
+		const data = await Account.post(body);
+		res.json(data)
+	} catch (err) {
+		next(err)
+	}
+})
 
 // MIDDLEWARE FUNCTIONS
 
@@ -45,6 +54,17 @@ async function checkId(req, res, next) {
 		err.statusCode = 500;
 		err.message = 'error retrieving an account';
 		next(err);
+	}
+}
+
+function checkAccountPost(req, res, next) {
+	const body = req.body;
+	if (!body.name || !body.budget) {
+		const err = new Error('body must include a name and a budget');
+		err.statusCode = 400;
+		next(err);
+	} else {
+		next();
 	}
 }
 
