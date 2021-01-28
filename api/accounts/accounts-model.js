@@ -4,8 +4,8 @@ module.exports = {
 	get,
 	getById,
 	post,
-	//update,
-	//remove,
+	update,
+	remove,
 }
 
 async function get() {
@@ -25,4 +25,19 @@ async function post(data) {
 	const [accountId] = await db.insert(data).into('accounts');
 	const account = await getById(accountId);
 	return account;
+}
+
+function update(id, changes) {
+	db('accounts').where({ id }).update(changes)
+	.then(count => {
+		return count;
+	})
+	.catch(err => {
+		throw err;
+	});
+}
+
+async function remove(id) {
+	const count = await db.del().from('accounts').where({ id });
+	return count;
 }

@@ -31,6 +31,27 @@ router.post('/', checkAccountPost, async (req, res, next) => {
 	}
 })
 
+router.put('/:id', checkId, checkAccountPost, async (req, res, next) => {
+	const { id } = req.params;
+	const changes = req.body;
+	try {
+		const data = await Account.update(id, changes)
+		res.json({ count: data });
+	} catch (err) {
+		next(err)
+	}
+})
+
+router.delete('/:id', checkId, async (req, res, next) => {
+	const { id } = req.params;
+	try {
+		const data = await Account.remove(id)
+		res.json({ count: data });
+	} catch (err) {
+		next(err)
+	}
+})
+
 // MIDDLEWARE FUNCTIONS
 
 router.use((err, req, res, next) => {
